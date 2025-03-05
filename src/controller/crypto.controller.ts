@@ -6,12 +6,12 @@ export class CryptoController {
   constructor(private readonly cryptoService: CryptoService) {}
 
   @Get('price')
-  async getPrice(@Query('symbol') symbol: string) {
+  async getPrice(@Query('symbols') symbols: string) {
     try{
-      if (!symbol) {
+      if (!symbols) {
         return { status: 400, message: 'Symbol query parameter is required' };
       }
-      const result = await this.cryptoService.getCryptoPrice(symbol.toLowerCase());
+      const result = await this.cryptoService.getCryptoPrice(symbols.toLowerCase());
       return { status: 200, data: result, message: 'Success' };
     } catch (error) {
       return { status: error.statusCode, message: error.message };

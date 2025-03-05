@@ -3,6 +3,7 @@ import { HttpService } from '@nestjs/axios';
 import { RedisService } from '../common/connect-redis';
 import { firstValueFrom } from 'rxjs';
 import { CustomError } from 'src/common/config';
+import { SettingService } from 'src/common/setting';
 
 @Injectable()
 export class CryptoService {
@@ -10,8 +11,8 @@ export class CryptoService {
 
   constructor(private readonly httpService: HttpService, private readonly redisService: RedisService) {}
 
-  async getCryptoPrice(symbol: string): Promise<any> {
-    const cacheKey = `crypto:${symbol}`;
+  async getCryptoPrice(symbols: string): Promise<any> {
+    const cacheKey = `crypto:${symbols}`;
     const cachedData = await this.redisService.get(cacheKey);
 
     if (cachedData) {
@@ -20,8 +21,8 @@ export class CryptoService {
 
     try {
       const response = await firstValueFrom(
-        this.httpService.get(this.COINGECKO_URL, {
-          params: { ids: symbol, vs_currencies: 'usd' },
+        this.httpService.get(SettingService.COINGECKO_URL, {
+          params: { ids: symbols, vs_currencies: 'usd' },
         })
       );
       await this.redisService.set(cacheKey, JSON.stringify(response.data), 30); // Cache for 30 sec
