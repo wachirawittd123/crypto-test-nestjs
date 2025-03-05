@@ -31,6 +31,15 @@
 $ npm install
 ```
 
+## Setting .env.development
+```bash
+NODE_ENV=development
+REDIS_URL="redis://localhost:6379"
+COINGECKO_URL="https://api.coingecko.com/api/v3/simple/price"
+JWT_SECRET="wachi07"
+PORT=3000
+```
+
 ## Compile and run the project
 
 ```bash
